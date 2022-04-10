@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>com.oppo.ux.AdbTools</id>
+    <name>Adb Tools</name>
+    <vendor email="ZouYongpeng@oppo.com" url="http://www.oppo.com">
+        OPPO UI Framework
+    </vendor>
+
+    <description>A plugin for execute adb code.</description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- 依赖的其他插件能力 -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <toolWindow
+                id="AdbTool"
+                secondary="false"
+                anchor="right"
+                factoryClass="com.oppo.ux.AdbToolWindow.AdbToolWindowFactory"/>
+    </extensions>
+
+    <!-- 插件动作 -->
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>

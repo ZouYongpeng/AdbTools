@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    https://www.cnblogs.com/auguse/articles/13797753.html
+    ADB指令介绍
+-->
+<instruction-set>
+    <instruction>
+        <name>查看所有设备</name>
+        <description></description>
+        <code>adb devices</code>
+        <showReaultEnable></showReaultEnable>
+    </instruction>
+
+    <instruction>
+        <name>启动adb</name>
+        <description></description>
+        <code>adb start-server</code>
+    </instruction>
+
+    <instruction>
+        <name>停止adb</name>
+        <description></description>
+        <code>adb kill-server</code>
+    </instruction>
+
+    <instruction>
+        <name>查看应用列表</name>
+        <description></description>
+        <code>adb shell pm list packages</code>
+    </instruction>
+
+    <instruction>
+        <name>查看前台Activity</name>
+        <description></description>
+        <code>adb shell dumpsys activity activities | grep mFocusedActivity</code>
+    </instruction>
+
+    <instruction>
+        <name>查看正在运行的Services</name>
+        <description></description>
+        <code>adb shell dumpsys activity services</code>
+    </instruction>
+
+    <instruction>
+        <name>电源键</name>
+        <description></description>
+        <code>adb shell input keyevent 26</code>
+    </instruction>
+
+    <instruction>
+        <name>菜单键</name>
+        <description></description>
+        <code>adb shell input keyevent 82</code>
+    </instruction>
+
+    <instruction>
+        <name>HOME 键</name>
+        <description></description>
+        <code>adb shell input keyevent 3</code>
+    </instruction>
+
+    <instruction>
+        <name>返回键</name>
+        <description></description>
+        <code>adb shell input keyevent 4</code>
+    </instruction>
+
+    <instruction>
+        <name>HOME 键</name>
+        <description></description>
+        <code>adb shell input keyevent 3</code>
+    </instruction>
+
+    <instruction>
+        <name>查看设备型号</name>
+        <description></description>
+        <code>adb shell getprop ro.product.model</code>
+    </instruction>
+
+    <instruction>
+        <name> 查看设备电池状况</name>
+        <description></description>
+        <code>adb shell dumpsys battery</code>
+    </instruction>
+
+    <instruction>
+        <name>查看设备屏幕分辨率</name>
+        <description></description>
+        <code>adb shell wm size</code>
+    </instruction>
+
+    <instruction>
+        <name>查看设备屏幕密度</name>
+        <description></description>
+        <code>adb shell wm density</code>
+    </instruction>
+
+    <instruction>
+        <name>查看设备显示屏参数</name>
+        <description></description>
+        <code>adb shell dumpsys window displays</code>
+    </instruction>
+
+    <instruction>
+        <name>顺序执行</name>
+        <description>description 1</description>
+        <code>
+            adb version
+            adb devices
+        </code>
+    </instruction>
+
+</instruction-set>
