@@ -1,16 +1,27 @@
 package com.oppo.ux.AdbToolWindow;
 
+import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.impl.ProjectManagerImpl;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.DocumentAdapter;
 import com.oppo.ux.InstructionLoader.InstructionLoader;
 import com.oppo.ux.InstructionLoader.InstructionNode;
 import com.oppo.ux.InstructionLoader.InstructionResult;
 import com.oppo.ux.Utils.StringUtils;
 import com.oppo.ux.XmlChooser.XmlFileChooser;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ContainerAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.List;
 
@@ -26,6 +37,7 @@ public class AdbToolWindow {
     private JPanel ConfigXmlSelectorPanel;
     private JTextArea ConfigXmlFilePathText;
     private JButton SelectBtn;
+    private JButton EditBtn;
     private JButton RefreshBtn;
 
     private JScrollPane OperatorScrollPanel;
@@ -35,15 +47,28 @@ public class AdbToolWindow {
     private JScrollPane ResultScrollPanel;
 
     public AdbToolWindow() {
-        SelectBtn.addActionListener(e -> {
-            showFileChooserDialog();
-        });
-        RefreshBtn.addActionListener(new ActionListener() {
+        ConfigXmlFilePathText.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                updateOperatorPanel(new File(ConfigXmlFilePathText.getText()));
+            protected void textChanged(@NotNull DocumentEvent e) {
+                String configFileName = ConfigXmlFilePathText.getText();
+                if (configFileName.toLowerCase().endsWith(".xml")) {
+                    EditBtn.setEnabled(true);
+                    RefreshBtn.setEnabled(true);
+                } else {
+                    EditBtn.setEnabled(false);
+                    RefreshBtn.setEnabled(false);
+                }
             }
         });
+        SelectBtn.addActionListener(e ->
+                showFileChooserDialog()
+        );
+        EditBtn.addActionListener(e ->
+                openFile(new File(ConfigXmlFilePathText.getText()))
+        );
+        RefreshBtn.addActionListener(e ->
+                updateOperatorPanel(new File(ConfigXmlFilePathText.getText()))
+        );
     }
 
     public JPanel getMainPanel() {
@@ -54,15 +79,33 @@ public class AdbToolWindow {
         XmlFileChooser fc = new XmlFileChooser("D:\\Code\\plugin\\AdbTools\\");
         fc.setOnChosenListener(isOk -> {
             if (isOk) {
-                System.out.println("ok");
                 ConfigXmlFilePathText.setText(fc.getSelectedFile().toString());
                 updateOperatorPanel(new File(fc.getSelectedFile().toString()));
             } else {
-                System.out.println("cancel");
                 ConfigXmlFilePathText.setText("null");
             }
         });
         fc.showOpenDialog(null);
+    }
+
+    private void openFile(@NotNull File file) {
+        if (!file.isFile()) {
+            return;
+        }
+
+        VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
+        if (virtualFile == null) {
+            return;
+        }
+
+        Project[] projects = ProjectManagerImpl.getInstance().getOpenProjects();
+        if (projects.length <= 0) {
+            return;
+        }
+
+        Project project = projects[0];
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+        fileEditorManager.openFile(virtualFile, true);
     }
 
     private void updateOperatorPanel(File file) {
@@ -81,7 +124,7 @@ public class AdbToolWindow {
         ));
         InstructionsPanel.setLayout(new FlowLayout(FlowLayout.LEADING, OPERATOR_PANEL_PADDING, OPERATOR_PANEL_PADDING));
         for (InstructionNode instruction : instructions) {
-            System.out.println("instruction = " + instruction);
+//            System.out.println("instruction = " + instruction);
             OperatorPanel operatorPanel = new OperatorPanel(instruction, new OperatorPanel.OnInstructionExecutedListener() {
                 @Override
                 public void onExecuted(List<InstructionResult> instructionResults) {

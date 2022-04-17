@@ -18,6 +18,7 @@
             <constraints border-constraint="North"/>
             <properties>
               <editable value="false"/>
+              <enabled value="true"/>
               <minimumSize width="1" height="200"/>
               <text value=""/>
             </properties>
@@ -30,6 +31,7 @@
               <component id="95919" class="javax.swing.JButton" binding="RefreshBtn">
                 <constraints border-constraint="East"/>
                 <properties>
+                  <enabled value="false"/>
                   <text value="刷新"/>
                 </properties>
               </component>
@@ -37,6 +39,13 @@
                 <constraints border-constraint="West"/>
                 <properties>
                   <text value="选择"/>
+                </properties>
+              </component>
+              <component id="6e615" class="javax.swing.JButton" binding="EditBtn">
+                <constraints border-constraint="Center"/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="编辑"/>
                 </properties>
               </component>
             </children>
